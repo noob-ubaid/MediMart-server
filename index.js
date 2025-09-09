@@ -4,7 +4,18 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
 const uri = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@ubaid-database.njfi7n5.mongodb.net/?retryWrites=true&w=majority&appName=Ubaid-Database`;
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const cors = require("cors");
 
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  })
+);
+app.use(express.json());
+app.use(cookieParser());
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -16,16 +27,27 @@ async function run() {
   try {
     const dataBase = client.db("Medimart");
     const usersCollection = dataBase.collection("users");
+    const bannersCollection = dataBase.collection("banners");
+    // ? get all user
+    app.get("/allUsers", async (req, res) => {
+      const result = await usersCollection.find().toArray();
+      res.send(result);
+    });
     // ? create user and store into db
-    app.post('/users', async (req,res)=>{
-        const data = req.body
-        const query = {email : data.email}
-        const alreadyExist = await usersCollection.findOne(query)
-        if(!!alreadyExist){
-            return res.send({message : 'User already exist'})
-        }
-        const result = await usersCollection.insertOne(data)
-        res.send(result)
+    app.post("/users", async (req, res) => {
+      const data = req.body;
+      const query = { email: data.email };
+      const alreadyExist = await usersCollection.findOne(query);
+      if (!!alreadyExist) {
+        return res.send({ message: "User already exist" });
+      }
+      const result = await usersCollection.insertOne(data);
+      res.send(result);
+    });
+    app.post('/createBanners',async(req,res) => {
+      const data = req.body
+      const result = await bannersCollection.insertOne(data)
+      res.send(result)
     })
   } finally {
   }

@@ -33,6 +33,11 @@ async function run() {
       const result = await usersCollection.find().toArray();
       res.send(result);
     });
+    // ? get banner from db
+    app.get('/getBanners', async(req,res) => {
+      const result = await bannersCollection.find().toArray()
+      res.send(result)
+    })
     // ? create user and store into db
     app.post("/users", async (req, res) => {
       const data = req.body;
@@ -44,6 +49,7 @@ async function run() {
       const result = await usersCollection.insertOne(data);
       res.send(result);
     });
+    // ? create banners for hero section
     app.post('/createBanners',async(req,res) => {
       const data = req.body
       const result = await bannersCollection.insertOne(data)

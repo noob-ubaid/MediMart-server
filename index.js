@@ -27,7 +27,7 @@ async function run() {
   try {
     const dataBase = client.db("Medimart");
     const usersCollection = dataBase.collection("users");
-    const bannersCollection = dataBase.collection("banners");
+    const categoryCollection = dataBase.collection("category");
     // ? get all user
     app.get("/allUsers", async (req, res) => {
       const result = await usersCollection.find().toArray();
@@ -36,6 +36,11 @@ async function run() {
     // ? get banner from db
     app.get('/getBanners', async(req,res) => {
       const result = await bannersCollection.find().toArray()
+      res.send(result)
+    })
+    // ? get category from db
+    app.get('/category',async(req,res)=> {
+      const result = await categoryCollection.find().toArray()
       res.send(result)
     })
     // ? create user and store into db

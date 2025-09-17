@@ -28,6 +28,7 @@ async function run() {
     const dataBase = client.db("Medimart");
     const usersCollection = dataBase.collection("users");
     const categoryCollection = dataBase.collection("category");
+    const reviewsCollection = dataBase.collection("reviews");
     // ? get all user
     app.get("/allUsers", async (req, res) => {
       const result = await usersCollection.find().toArray();
@@ -58,6 +59,12 @@ async function run() {
     app.post('/createBanners',async(req,res) => {
       const data = req.body
       const result = await bannersCollection.insertOne(data)
+      res.send(result)
+    })
+    // ? create reviews for review section
+    app.post('/reviews',async(req,res) => {
+      const data = req.body
+      const result = await reviewsCollection.insertOne(data)
       res.send(result)
     })
   } finally {

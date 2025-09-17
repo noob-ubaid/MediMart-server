@@ -34,6 +34,11 @@ async function run() {
       const result = await usersCollection.find().toArray();
       res.send(result);
     });
+    // ? get all reviews
+    app.get("/allReviews", async (req, res) => {
+      const result = await reviewsCollection.find().toArray();
+      res.send(result);
+    });
     // ? get banner from db
     app.get('/getBanners', async(req,res) => {
       const result = await bannersCollection.find().toArray()
